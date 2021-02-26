@@ -52,7 +52,7 @@ const notFound = (request, response) => {
 };
 
 const notFoundMeta = (request, response) => {
-  return respondJSONMeta(request, response, 404, responseJSON)
+  return respondJSONMeta(request, response, 404)
 };
 
 module.exports = {
