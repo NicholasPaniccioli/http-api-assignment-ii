@@ -1,34 +1,34 @@
 const http = require('http');
 const url = require('url');
-const query = require('querystring');
 const htmlHandler = require('./htmlResponses.js');
 const jsonHandler = require('./jsonResponses.js');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
 const urlStruct = {
-  '/': htmlHandler.getIndex,
-  '/success': jsonHandler.success,
-  '/badRequest': jsonHandler.badRequest,
-  '/unauthorized': jsonHandler.unauthorized,
-  '/forbidden': jsonHandler.forbidden,
-  '/internal': jsonHandler.internal,
-  '/notImplemented': jsonHandler.notImplemented,
-  '/notFound': jsonHandler.notFound,
-  notFound: jsonHandler.notFound,
-  '/style.css': htmlHandler.getStyle,
+  GET: {
+    '/': htmlHandler.getIndex,
+    '/style.css': htmlHandler.getStyle,
+    '/getUsers': jsonHandler.getUsers,
+    '/updateUser': jsonHandler.updateUser,
+    notFound: jsonHandler.notFound,
+  },
+  HEAD: {
+    '/getUsers': jsonHandler.getUsersMeta,
+    notFound: jsonHandler.notFoundMeta,
+  },
 };
 
 const onRequest = (request, response) => {
   const parsedUrl = url.parse(request.url);
-  const params = query.parse(parsedUrl.query);
-  const acceptedTypes = request.headers.accept.split(',');
 
-  if (urlStruct[parsedUrl.pathname]) {
-    urlStruct[parsedUrl.pathname](request, response, acceptedTypes, params);
-    // urlStruct[parsedUrl.pathname](request, response, params);
+  console.dir(parsedUrl.pathname);
+  console.dir(request.method);
+
+  if (urlStruct[request.method][parsedUrl.pathname]) {
+    urlStruct[request.method][parsedUrl.pathname](request, response);
   } else {
-    urlStruct.notFound(request, response, params);
+    urlStruct[request.method].notFound(request, response);
   }
 };
 

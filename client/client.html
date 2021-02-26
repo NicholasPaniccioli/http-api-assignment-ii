@@ -6,6 +6,25 @@
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script type="text/babel">
+    const handleResponse= (xhr, parseResponse)=>{
+      const content = document.querySelector('#content');
+    };
+
+    const requestUpdate = (e, userForm) => {
+      const url = userForm.querySelector('#urlField').value;
+      const method = userForm.querySelector('#methodSelect').value;
+    
+    
+    };
+
+    const init = () => {
+      const userForm = document.querySelector('#userForm');
+      const getUsers = (e) => requestUpdate(e, userForm);
+
+      userForm.addEventListener('submit', getUsers);
+    };
+
+    window.onload = init;
 
   </script>
 </head>
