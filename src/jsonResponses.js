@@ -31,15 +31,31 @@ const getUsersMeta = (request, response) => {
   return respondJSONMeta(request, response, 200);
 };
 
-const updateUser = (request, response) => {
-  const newUser ={
-    createdAt: Date.now(),
+const addUser = (request, response, body) => {
+  const responseJSON = {
+    message: 'Name and age are both required',
   };
 
-  users[newUser.createdAt] = newUser;
+  if(!body.name || !body.age) {
+    responseJSON.id = 'missingParams';
+    return respondJSON(request, response, 400, responseJSON);
+  }
 
-  return respondJSON(request, response, 201, newUser);
+  let responseCode = 201;
 
+  if (users[body.name]) {
+    responseCode = 204;
+  } else {
+    users[body.name] = {};
+    users[body.name].name = body.name;
+  }
+
+  users[body.name].age = body.age;
+  
+  if (responseCode === 201) {
+    responseJSON.message = 'Created Successfully!';
+    return respondJSON(request, response, responseCode, responseJSON);
+  }
 };
 
 const notFound = (request, response) => {
@@ -58,7 +74,7 @@ const notFoundMeta = (request, response) => {
 module.exports = {
   getUsers,
   getUsersMeta,
-  updateUser,
+  addUser,
   notFound,
   notFoundMeta,
 };
