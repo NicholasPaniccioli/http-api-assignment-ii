@@ -24,38 +24,37 @@ const urlStruct = {
 };
 
 const handlePost = (request, response, parsedUrl) => {
-  if(parsedUrl.pathname ==='/addUser'){
+  if (parsedUrl.pathname === '/addUser') {
     const body = [];
-    
-    request.on('error', (err) =>{
+
+    request.on('error', (err) => {
       console.dir(err);
       response.statusCode = 400;
       response.end();
-    })
+    });
 
     request.on('data', (chunk) => {
       body.push(chunk);
     });
 
-    request.on('end', () =>{
+    request.on('end', () => {
       const bodyString = Buffer.concat(body).toString();
       const bodyParams = query.parse(bodyString);
-    
+
       jsonHandler.addUser(request, response, bodyParams);
     });
   }
 };
 
-const handleGet = (request, response, parsedUrl) => {
-  if(parsedUrl.pathname === '/style.css'){
-    htmlHandler.getStyle(request, response);
-  } else if (parsedUrl.pathname === '/getUsers'){
-    jsonHandler.getUsers(request, response);
-  } else {
-    htmlHandler.getIndex(request, response);
-  }
-};
-
+// const handleGet = (request, response, parsedUrl) => {
+//   if (parsedUrl.pathname === '/style.css') {
+//     htmlHandler.getStyle(request, response);
+//   } else if (parsedUrl.pathname === '/getUsers') {
+//     jsonHandler.getUsers(request, response);
+//   } else {
+//     htmlHandler.getIndex(request, response);
+//   }
+// };
 
 const onRequest = (request, response) => {
   const parsedUrl = url.parse(request.url);
